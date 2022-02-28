@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import './App.css';
 import AddContact from './components/addContact';
+import BaseModalWrapper from './components/BaseModalWrapper';
 import Contacts from './components/Contacts';
 
 
 
 function App() {
+  const [isModalVisible, setIsModalVisible] = useState(false)
+
+  const toogleModal = () => {
+    setIsModalVisible(wasModalVisible => !wasModalVisible)
+  }
 
   const testcontacts = [
     {
@@ -22,8 +28,9 @@ function App() {
 
   return (
     <div className="App">
-        <AddContact/>
+        <button onClick={toogleModal}>Show Modal</button>
         <Contacts contacts={contacts}/>
+        <BaseModalWrapper isModalVisible={isModalVisible} onBackDropClick={toogleModal}/>
     </div>
   );
 }
