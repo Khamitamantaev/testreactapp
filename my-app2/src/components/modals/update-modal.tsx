@@ -1,11 +1,10 @@
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,16 +18,35 @@ const style = {
     p: 4,
 };
 
-
-
-export default function BasicModal(props: any) {
+export default function UpdateModal(props: any) {
     const [open, setOpen] = React.useState(false);
-
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     const [values, setValues] = useState({
         id: 0,
         name: '',
         phone: 0
     })
+
+    useEffect(() => {
+        setValues(props.contact)
+        console.log(props.contact)
+    }, [open]);
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setValues({
+            id: values.id,
+            name: values.name,
+            phone: values.phone,
+            [name]: value
+        } as {
+            id: number,
+            name: string,
+            phone: number,
+        })
+        console.log(value)
+    }
 
     const handleCloseClick = () => {
         setOpen(false);
@@ -48,37 +66,14 @@ export default function BasicModal(props: any) {
         })
     }
 
-   
-
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setValues({
-            id: props.contacts.length,
-            name: values.name,
-            phone: values.phone,
-            [name]: value
-        } as {
-            id: number,
-            name: string,
-            phone: number,
-        })
-        console.log(values)
-    }
-
-
-    const onClick = () => {
-        props.onClick(values)
-        handleCloseClick()
-        setValues({
-            id: 0,
-            name: '',
-            phone: 0
-        })
+    const updateContact = () => {
+         props.handleUpdateContact(values)
+         setOpen(false)
     }
 
     return (
         <div>
-            <Button onClick={handleOpenClick}>Add Contact</Button>
+            <Button onClick={handleOpenClick}>Update Contact</Button>
             <Modal
                 open={open}
                 onClose={handleCloseClick}
@@ -89,7 +84,7 @@ export default function BasicModal(props: any) {
                     <Grid container spacing={2} columns={{}}>
                         <Grid item xs={6}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Добавить контакт
+                                Обновить контакт
                             </Typography>
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
@@ -112,18 +107,16 @@ export default function BasicModal(props: any) {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <Button onClick={onClick} variant="contained" color="primary">
-                                Добавить
+                            <Button onClick={updateContact} variant="contained" color="primary">
+                                Обновить
                             </Button>
                             <Button onClick={handleCloseClick} variant="contained" color="primary">
                                 Отмена
                             </Button>
                         </Grid>
                     </Grid>
-
-
                 </Box>
             </Modal>
-        </div >
+        </div>
     );
 }
