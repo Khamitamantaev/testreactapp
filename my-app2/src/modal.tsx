@@ -1,11 +1,11 @@
-import React, { useState,ChangeEvent } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-  
+
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,17 +19,26 @@ const style = {
     p: 4,
 };
 
-  
+
 
 export default function BasicModal(props: any) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+
     const [values, setValues] = useState({
         id: 0,
         name: '',
         phone: 0
     })
+
+    const handleCloseClick = () => {
+        setOpen(false);
+        setValues({
+            id: 0,
+            name: '',
+            phone: 0
+        })
+    }
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -38,14 +47,18 @@ export default function BasicModal(props: any) {
             name: values.name,
             phone: values.phone,
             [name]: value
-        } as any)
+        } as {
+            id: number,
+            name: string,
+            phone: number,
+        })
         console.log(values)
-      }
-    
-    
+    }
+
+
     const onClick = () => {
         props.onClick(values)
-        handleClose()
+        handleCloseClick()
         setValues({
             id: 0,
             name: '',
@@ -58,12 +71,12 @@ export default function BasicModal(props: any) {
             <Button onClick={handleOpen}>Add Contact</Button>
             <Modal
                 open={open}
-                onClose={handleClose}
+                onClose={handleCloseClick}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Grid container spacing={2}  columns={{  }}>
+                    <Grid container spacing={2} columns={{}}>
                         <Grid item xs={6}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
                                 Добавить контакт
@@ -92,7 +105,7 @@ export default function BasicModal(props: any) {
                             <Button onClick={onClick} variant="contained" color="primary">
                                 Добавить
                             </Button>
-                            <Button onClick={handleClose} variant="contained" color="primary">
+                            <Button onClick={handleCloseClick} variant="contained" color="primary">
                                 Отмена
                             </Button>
                         </Grid>
