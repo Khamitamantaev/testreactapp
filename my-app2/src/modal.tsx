@@ -5,11 +5,6 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-
-interface IContact {
-    name: string,
-    phone: number
-  }
   
 
 const style = {
@@ -31,13 +26,17 @@ export default function BasicModal(props: any) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const [values, setValues] = useState({
+        id: 0,
         name: '',
         phone: 0
     })
+
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setValues({
-            ...values,
+            id: props.contacts.length,
+            name: values.name,
+            phone: values.phone,
             [name]: value
         } as any)
         console.log(values)
@@ -48,6 +47,7 @@ export default function BasicModal(props: any) {
         props.onClick(values)
         handleClose()
         setValues({
+            id: 0,
             name: '',
             phone: 0
         })

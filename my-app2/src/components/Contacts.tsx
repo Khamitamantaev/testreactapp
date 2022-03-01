@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 
-const Contacts = (props: { contacts: any[]; }) => {
+const Contacts = (props: { contacts: { id: number, name: string; phone: number; }[], onDeleteClick: any }) => {
+
+    const handleRemoveContact = (id: number) => {
+        props.onDeleteClick(id)
+    }
+
     return(
         <>
             <h1>Contacts</h1>
             <div>
-            
-            {props.contacts.slice().reverse().map((contact, index) => (
-                <div key={index} >
+            {props.contacts.slice().reverse().map((contact) => (
+                <div key={contact.id}>
                     <div >Name: {contact.name} with Number: {contact.phone}</div>
-                    <Button>Delete Contact</Button>
+                    <Button onClick={() => handleRemoveContact(contact.id)}>Delete Contact</Button>
                     <Button>Update Contact</Button>
                 </div>
             ))}
