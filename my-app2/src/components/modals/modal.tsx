@@ -62,7 +62,7 @@ export default function BasicModal(props: any) {
             name: string,
             phone: number,
         })
-        console.log(values)
+        // console.log(values)
     }
 
 

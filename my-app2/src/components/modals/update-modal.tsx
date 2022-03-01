@@ -20,8 +20,6 @@ const style = {
 
 export default function UpdateModal(props: any) {
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const [values, setValues] = useState({
         id: 0,
         name: '',
@@ -30,7 +28,7 @@ export default function UpdateModal(props: any) {
 
     useEffect(() => {
         setValues(props.contact)
-        console.log(props.contact)
+        // console.log(props.contact)
     }, [open]);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +43,7 @@ export default function UpdateModal(props: any) {
             name: string,
             phone: number,
         })
-        console.log(value)
+        // console.log(value)
     }
 
     const handleCloseClick = () => {
