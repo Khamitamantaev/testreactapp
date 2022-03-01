@@ -4,6 +4,7 @@ import Contacts from './components/Contacts';
 import BasicModal from './modal';
 
 
+
 function App() {
 
   const testcontacts = [
@@ -21,13 +22,17 @@ function App() {
     },
   ]
 
+  
   const [contacts, setContacts] = useState(testcontacts)
+
+  const onclick = (contactData: { name: string, phone: number }) => {
+    setContacts([...contacts, contactData])
+}
 
   return (
     <div className="App">
-      <BasicModal/>
+        <BasicModal onClick={onclick}  />
         <Contacts contacts={contacts}></Contacts>
-        
     </div>
   );
 }
