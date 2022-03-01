@@ -40,6 +40,7 @@ function App() {
      const newList = contacts.filter((item) => item.id !== id);
      setContacts(newList)
   }
+  
   const onUpdateClick = (contactupdate: { id: number, name: string, phone: number}) => {
      console.log(contactupdate)
      setIsUpdated(true)

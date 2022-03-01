@@ -1,6 +1,7 @@
 import React  from 'react';
 import Button from '@mui/material/Button';
 import UpdateModal from './modals/update-modal';
+import DeleteModal from './modals/delete-modal';
 
 const Contacts = (props: { contacts: { id: number, name: string; phone: number; }[], onDeleteClick: any, onUpdateClick:any }) => {
 
@@ -22,7 +23,7 @@ const Contacts = (props: { contacts: { id: number, name: string; phone: number; 
             {props.contacts.slice().reverse().map((contact) => (
                 <div key={contact.id}>
                     <div >Name: {contact.name} with Number: {contact.phone}</div>
-                    <Button onClick={() => handleRemoveContact(contact.id)}>Delete Contact</Button>
+                    <DeleteModal onClick={() => handleRemoveContact(contact.id)}>Delete Contact</DeleteModal>
                     <UpdateModal handleUpdateContact={handleUpdateContact}  contact={contact} ></UpdateModal>
                 </div>
             ))}
