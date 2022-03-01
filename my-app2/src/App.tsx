@@ -28,7 +28,6 @@ function App() {
     },
   ]
 
-  const [id, setId] = useState(testcontacts.length - 1)
   const [contacts, setContacts] = useState(testcontacts)
 
   useEffect(() => {
@@ -40,15 +39,18 @@ function App() {
   }
 
   const onDeleteClick = (id: number) => {
-    //  const newContact = contacts.find((contact) => contact.id === id)
      const newList = contacts.filter((item) => item.id !== id);
      setContacts(newList)
+  }
+  const onUpdateClick = (id: number) => {
+     const updatedContact = contacts.find((contact) => contact.id === id)
+     console.log(updatedContact)
   }
 
   return (
     <div className="App">
-        <BasicModal onClick={onclick} contacts={contacts}  />
-        <Contacts contacts={contacts} onDeleteClick={onDeleteClick}></Contacts>
+        <BasicModal onClick={onclick} contacts={contacts} onUpdateClick={onUpdateClick} />
+        <Contacts contacts={contacts} onDeleteClick={onDeleteClick} onUpdateClick={onUpdateClick}></Contacts>
     </div>
   );
 }

@@ -23,7 +23,6 @@ const style = {
 
 export default function BasicModal(props: any) {
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
 
     const [values, setValues] = useState({
         id: 0,
@@ -39,6 +38,17 @@ export default function BasicModal(props: any) {
             phone: 0
         })
     }
+
+    const handleOpenClick = () => {
+        setOpen(true);
+        setValues({
+            id: 0,
+            name: '',
+            phone: 0
+        })
+    }
+
+   
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -68,7 +78,7 @@ export default function BasicModal(props: any) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Add Contact</Button>
+            <Button onClick={handleOpenClick}>Add Contact</Button>
             <Modal
                 open={open}
                 onClose={handleCloseClick}
