@@ -1,8 +1,11 @@
 import React from 'react'
 import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const WalletPage = () => {
+    let params = useParams();
+
     return (
         <>
             <div className="min-h-full">
@@ -28,7 +31,7 @@ const WalletPage = () => {
                 </nav>
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <h1 className="text-3xl font-bold text-gray-900">Wallet Page</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">Wallet with id: {params.walletId}</h1>
                     </div>
                 </header>
                 <main>

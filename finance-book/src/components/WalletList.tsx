@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
-import {observer} from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import wallet from '../store/wallet';
 
 const WalletList = observer(() => {
@@ -13,7 +13,7 @@ const WalletList = observer(() => {
                         <div className="flex items-center justify-between h-16">
                             <div className="flex items-center">
                                 <div className="flex-shrink-0">
-                                <img src={logo}  className="h-8 w-8" alt="logo" />
+                                    <img src={logo} className="h-8 w-8" alt="logo" />
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
@@ -43,13 +43,22 @@ const WalletList = observer(() => {
                         {/* Replace with your content */}
                         <div className="px-4 py-6 sm:px-0">
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
-                                {wallet.wallets.map(wal => 
-                                <div className='mt-4 ml-4' key={wal.id} >
-                                    {wal.name + "      "} 
-                                    {wal.balance}
-                                    <button onClick={() => wallet.consoleWallet(wal.id)}>Редактировать</button>
-                                    <button onClick={() => wallet.deleteWallet(wal.id)}>Удалить</button>
-                                </div>)}
+                                {wallet.wallets.map(wal =>
+                                    <div className='mt-4 ml-4' key={wal.id} >
+                                        {wal.name + "      "}
+                                        {wal.balance}
+                                        
+                                        <button onClick={() => wallet.consoleWallet(wal.id)}>
+                                        <Link
+                                            style={{ display: "block", margin: "1rem 0" }}
+                                            to={`/wallet/${wal.id}`}
+                                            key={wal.id}
+                                        >
+                                            Редактировать
+                                        </Link>
+                                        </button>
+                                        <button onClick={() => wallet.deleteWallet(wal.id)}>Удалить</button>
+                                    </div>)}
                             </div>
                         </div>
                         {/* /End replace */}
