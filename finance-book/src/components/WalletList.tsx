@@ -1,8 +1,10 @@
 import React from 'react'
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
+import {observer} from 'mobx-react-lite'
+import wallet from '../store/wallet';
 
-const WalletList = () => {
+const WalletList = observer(() => {
     return (
         <>
             <div className="min-h-full">
@@ -37,7 +39,15 @@ const WalletList = () => {
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                         {/* Replace with your content */}
                         <div className="px-4 py-6 sm:px-0">
-                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
+                                {wallet.wallets.map(wallet => 
+                                <div key={wallet.id} >
+                                    {wallet.name + "      "} 
+                                    {wallet.balance}
+                                    <button>Редактировать</button>
+                                    <button>Удалить</button>
+                                </div>)}
+                            </div>
                         </div>
                         {/* /End replace */}
                     </div>
@@ -45,6 +55,6 @@ const WalletList = () => {
             </div>
         </>
     )
-}
+})
 
 export default WalletList

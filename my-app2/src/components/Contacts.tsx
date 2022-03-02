@@ -5,7 +5,6 @@ import DeleteModal from './modals/delete-modal';
 
 const Contacts = (props: { contacts: { id: number, name: string; phone: number; }[], onDeleteClick: any, onUpdateClick:any }) => {
 
-    
 
     const handleRemoveContact = (id: number) => {
         props.onDeleteClick(id)
@@ -19,7 +18,6 @@ const Contacts = (props: { contacts: { id: number, name: string; phone: number; 
         <>
             <h1>Contacts</h1>
             <div>
-           
             {props.contacts.slice().reverse().map((contact) => (
                 <div key={contact.id}>
                     <div >Name: {contact.name} with Number: {contact.phone}</div>
