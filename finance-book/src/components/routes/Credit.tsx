@@ -1,8 +1,8 @@
 import React from 'react'
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
 
-const WalletList = () => {
+const Credit = () => {
     return (
         <>
             <div className="min-h-full">
@@ -15,12 +15,10 @@ const WalletList = () => {
                                 </div>
                                 <div className="hidden md:block">
                                     <div className="ml-10 flex items-baseline space-x-4">
-                                        {/* Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" */}
-                                        <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/">WalletList</Link>
+                                    <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/">WalletList</Link>
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/wallet">Wallet</Link>
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/debit">Debit</Link>
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/credit">Credit</Link>
-
                                     </div>
                                 </div>
                             </div>
@@ -41,7 +39,7 @@ const WalletList = () => {
                 </nav>
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">Credit</h1>
                     </div>
                 </header>
                 <main>
@@ -58,4 +56,4 @@ const WalletList = () => {
     )
 }
 
-export default WalletList
+export default Credit
