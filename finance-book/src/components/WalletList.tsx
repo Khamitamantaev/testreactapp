@@ -36,16 +36,19 @@ const WalletList = observer(() => {
                     </div>
                 </header>
                 <main>
-                    <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                    <div className='mx-auto py-4 sm:px-6 lg:px-10'>
+                        <button>Добавить кошелек</button>
+                    </div>
+                    <div className="max-w-7xl mx-auto py-2 sm:px-6 lg:px-8">
                         {/* Replace with your content */}
                         <div className="px-4 py-6 sm:px-0">
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
-                                {wallet.wallets.map(wallet => 
-                                <div key={wallet.id} >
-                                    {wallet.name + "      "} 
-                                    {wallet.balance}
-                                    <button>Редактировать</button>
-                                    <button>Удалить</button>
+                                {wallet.wallets.map(wal => 
+                                <div className='mt-4 ml-4' key={wal.id} >
+                                    {wal.name + "      "} 
+                                    {wal.balance}
+                                    <button onClick={() => wallet.consoleWallet(wal.id)}>Редактировать</button>
+                                    <button onClick={() => wallet.deleteWallet(wal.id)}>Удалить</button>
                                 </div>)}
                             </div>
                         </div>

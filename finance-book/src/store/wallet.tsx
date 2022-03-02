@@ -1,10 +1,11 @@
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, remove } from "mobx"
 
 export interface IWallet {
     id: number,
     name: string,
     balance: number
 }
+
 
 class Wallet {
     wallets: IWallet[] = [
@@ -21,9 +22,15 @@ class Wallet {
         this.wallets.push(wallet)
     }
 
-    // removeWallet(id: number) {
-    //     this.wallets = this.wallets.filter(wallet => wallet.id !== id)
-    // }
+    consoleWallet(id: number) {
+        console.log(`Clicked with id ${id}`)
+    }
+
+    deleteWallet(id: number) {
+      this.wallets =  this.wallets.filter(wallet => wallet.id !== id)
+    }
+
+    
 }
 
 export default new Wallet()
