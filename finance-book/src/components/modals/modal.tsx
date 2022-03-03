@@ -88,7 +88,7 @@ export default function BasicModal() {
                     <Grid container spacing={2} columns={{}}>
                         <Grid item xs={6}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Добавить контакт
+                                Добавить Кошелек
                             </Typography>
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}

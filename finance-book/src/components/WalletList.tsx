@@ -6,6 +6,7 @@ import wallet from '../store/wallet';
 import DeleteModal from './modals/delete-modal';
 import UpdateModal from './modals/update-modal';
 import BasicModal from './modals/modal';
+import Button from '@mui/material/Button';
 
 const WalletList = observer(() => {
     return (
@@ -40,19 +41,29 @@ const WalletList = observer(() => {
                 </header>
                 <main>
                     <div className='mx-auto py-4 sm:px-6 lg:px-10'>
-                        <BasicModal/>
+                        <BasicModal />
                     </div>
                     <div className="max-w-7xl mx-auto py-2 sm:px-6 lg:px-8">
                         {/* Replace with your content */}
                         <div className="px-4 py-6 sm:px-0">
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-120" >
                                 {wallet.wallets.slice().reverse().map(wal =>
-                                    <div className=' ml-2' key={wal.id} >
-                                        {wal.name + "      "}
-                                        {wal.balance}
-                                        <DeleteModal id={wal.id}/>
-                                        <UpdateModal id={wal.id}/>
-                                       
+                                    <div className=' ml-2 border border-' key={wal.id} >
+                                        <Button >
+                                            <Link
+                                                style={{ display: "block", margin: "1rem 0" }}
+                                                to={`/wallet/${wal.id}`}
+                                                key={wal.id}
+                                            >
+                                                <div className='border'>
+                                                    {wal.name} with balance: {wal.balance}
+                                                </div>
+                                            </Link>
+                                        </Button>
+
+                                        <DeleteModal id={wal.id} />
+                                        <UpdateModal id={wal.id} />
+
                                     </div>)}
                             </div>
                         </div>
