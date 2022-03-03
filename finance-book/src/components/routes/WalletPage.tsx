@@ -6,6 +6,7 @@ import wallet from '../../store/wallet';
 import AddDebitModal from '../../components/modals/add-debit-modal'
 import AddCreditModal from '../../components/modals/add-credit-modal'
 import { observer } from 'mobx-react-lite'
+import { Button } from '@mui/material';
 
 const WalletPage = observer(() => {
 
@@ -48,18 +49,33 @@ const WalletPage = observer(() => {
                         <div className="grid grid-cols-2 gap-4">
 
                             <div className="bg-blue-100">
-                                <AddDebitModal walletId={wal?.id}></AddDebitModal>
-                                {wallet.debits.filter(debit => debit.walletId === wal?.id).map(debit =>
+                                
+                                {walletID ? wallet.debits.slice(0).slice(-5).reverse().filter(debit => debit.walletId === wal?.id).map(debit =>
                                     <div key={debit.id}>
                                         {debit.balance} comments: {debit.comments}
-                                    </div>)}
+                                    </div>) : null}
+                                <Button >
+                                    <Link
+                                        style={{ display: "block", margin: "1rem 0" }}
+                                        to={`/debit/${wal?.id}`}
+                                    >
+                                        Полный список debit
+                                    </Link>
+                                </Button>
                             </div>
                             <div className="bg-red-100">
-                                <AddCreditModal walletId={wal?.id} ></AddCreditModal>
-                                {wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
+                                {walletID ? wallet.credits.slice(0).slice(-5).reverse().filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments}
-                                    </div>)}
+                                    </div>) : null}
+                                    <Button >
+                                    <Link
+                                        style={{ display: "block", margin: "1rem 0" }}
+                                        to={`/credit/${wal?.id}`}
+                                    >
+                                        Полный список credit
+                                    </Link>
+                                </Button>
                             </div>
                         </div>
                         {/* /End replace */}

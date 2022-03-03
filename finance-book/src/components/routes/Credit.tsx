@@ -1,8 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import wallet from '../../store/wallet';
+import AddCreditModal from '../../components/modals/add-credit-modal'
+import { observer } from 'mobx-react-lite';
 
-const Credit = () => {
+const Credit = observer(() => {
+
+    const params = useParams();
+
+    let walletID: string = params.walletId!
+
+    const [wal, setWal] = useState(wallet.getWalletByID(parseInt(walletID)))
+
     return (
         <>
             <div className="min-h-full">
@@ -33,9 +44,14 @@ const Credit = () => {
                 </header>
                 <main>
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                        {/* Replace with your content */}
+                    <AddCreditModal walletId={wal?.id} ></AddCreditModal>
                         <div className="px-4 py-6 sm:px-0">
-                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" />
+                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
+                            {walletID ? wallet.credits.slice().reverse().filter(credit => credit.walletId === wal?.id).map(credit =>
+                                    <div key={credit.id}>
+                                        {credit.balance} comments: {credit.comments}
+                                    </div>): null}
+                            </div>
                         </div>
                         {/* /End replace */}
                     </div>
@@ -43,6 +59,6 @@ const Credit = () => {
             </div>
         </>
     )
-}
+})
 
 export default Credit

@@ -15,8 +15,12 @@ ReactDOM.render(
       <Route path="/wallet" element={<WalletPage />} >
         <Route path=":walletId" element={<WalletPage />} />
       </Route>
-      <Route path="/credit" element={<Credit />} />
-      <Route path="/debit" element={<Debit />} />
+      <Route path="/credit" element={<Credit />} >
+        <Route path=":walletId" element={<Credit />} />
+      </Route>
+      <Route path="/debit" element={<Debit />}>
+        <Route path=":walletId" element={<Debit />} />
+      </Route>
     </Routes>
   </BrowserRouter>,
   document.getElementById('root')
