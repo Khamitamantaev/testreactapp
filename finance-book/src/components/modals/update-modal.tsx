@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-
+import wallet from '../../store/wallet';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -23,36 +23,30 @@ export default function UpdateModal(props: any) {
     const [values, setValues] = useState({
         id: 0,
         name: '',
-        phone: 0
+        balance: 0
     })
 
-    useEffect(() => {
-        setValues(props.contact)
-        // console.log(props.contact)
-    }, [open]);
+    let walletID: string = props.id
+
+    const CURRENT_VALUE = wallet.getWalletByID(parseInt(walletID))!
+    useEffect(() => setValues(CURRENT_VALUE), [open])
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         setValues({
-            id: values.id,
-            name: values.name,
-            phone: values.phone,
-            [name]: value
-        } as {
+                id: values.id,
+                name: values.name,
+                balance: values.balance,
+                [name]: value
+            } as unknown as {
             id: number,
             name: string,
-            phone: number,
+            balance: number,
         })
-        // console.log(value)
     }
 
     const handleCloseClick = () => {
         setOpen(false);
-        setValues({
-            id: 0,
-            name: '',
-            phone: 0
-        })
     }
 
     const handleOpenClick = () => {
@@ -60,18 +54,18 @@ export default function UpdateModal(props: any) {
         setValues({
             id: 0,
             name: '',
-            phone: 0
+            balance: 0
         })
     }
 
     const updateContact = () => {
-         props.handleUpdateContact(values)
+        wallet.updateWallet(values)
          setOpen(false)
     }
 
     return (
         <div>
-            <Button onClick={handleOpenClick}>Update Contact</Button>
+            <Button onClick={handleOpenClick}>Update Wallet</Button>
             <Modal
                 open={open}
                 onClose={handleCloseClick}
@@ -82,7 +76,7 @@ export default function UpdateModal(props: any) {
                     <Grid container spacing={2} columns={{}}>
                         <Grid item xs={6}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Обновить контакт
+                                Обновить кошелек
                             </Typography>
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
@@ -97,10 +91,10 @@ export default function UpdateModal(props: any) {
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
                                 type="text"
-                                label="phone"
+                                label="balance"
                                 variant="outlined"
-                                name="phone"
-                                value={values.phone}
+                                name="balance"
+                                value={values.balance}
                                 onChange={handleInputChange}
                             />
                         </Grid>

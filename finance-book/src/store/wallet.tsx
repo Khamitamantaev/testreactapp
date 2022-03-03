@@ -35,6 +35,18 @@ class Wallet {
         return wallet
     }
 
+    updateWallet(walletUpdate: { id: number, name: string, balance: number}) {
+        this.wallets[this.wallets.findIndex(wal => wal.id === walletUpdate.id)] = walletUpdate
+    }
+
+    // updateWallet(walletUpdate: { id: number, name: string, balance: number}) => {
+    //     console.log(contactupdate)
+    //     setIsUpdated(true)
+    //     contacts[contacts.findIndex(el => el.id === contactupdate.id)] = contactupdate;
+    //  }
+
+    
+
     
 }
 

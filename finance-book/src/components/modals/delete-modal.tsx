@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import wallet from '../../store/wallet';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -23,7 +24,7 @@ export default function DeleteModal(props: any) {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Delete Contact</Button>
+            <Button onClick={handleOpen}>Delete Wallet</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -32,12 +33,12 @@ export default function DeleteModal(props: any) {
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Удалить контакт?
+                        Удалить кошелек?
                     </Typography>
-                    <Button variant="contained" color="primary">
+                    <Button onClick={() => wallet.deleteWallet(props.id)} variant="contained" color="primary">
                         Удалить
                     </Button>
-                    <Button onClick={handleClose} variant="contained" color="primary">
+                    <Button onClick={handleClose}  variant="contained" color="primary">
                         Отмена
                     </Button>
                 </Box>

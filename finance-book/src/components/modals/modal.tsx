@@ -55,7 +55,7 @@ export default function BasicModal() {
         setValues({
             id: wallet.wallets.length,
             name: values.name,
-            phone: values.balance,
+            balance: values.balance,
             [name]: value
         } as unknown as {
             id: number,

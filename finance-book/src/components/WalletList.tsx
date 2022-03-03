@@ -50,18 +50,9 @@ const WalletList = observer(() => {
                                     <div className=' ml-2' key={wal.id} >
                                         {wal.name + "      "}
                                         {wal.balance}
-                                        
-                                        
-                                        <button onClick={() => wallet.consoleWallet(wal.id)}>
-                                        <Link
-                                            style={{ display: "block", margin: "1rem 0" }}
-                                            to={`/wallet/${wal.id}`}
-                                            key={wal.id}
-                                        >
-                                            Редактировать
-                                        </Link>
-                                        </button>
-                                        <button onClick={() => wallet.deleteWallet(wal.id)}>Удалить</button>
+                                        <DeleteModal id={wal.id}/>
+                                        <UpdateModal id={wal.id}/>
+                                       
                                     </div>)}
                             </div>
                         </div>
