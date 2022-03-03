@@ -6,13 +6,31 @@ export interface IWallet {
     balance: number
 }
 
+export interface IDebit {
+    id: number,
+    comments: string,
+    balance: number,
+    walletId: number
+}
+
+export interface ICredit {
+    id: number,
+    comments: string,
+    balance: number,
+    walletId: number
+}
+
 
 class Wallet {
+
     wallets: IWallet[] = [
         {id: 0, name: 'Crypto', balance: 1},
         {id: 1, name: 'SimpleWallet', balance: 10},
         {id: 2, name: 'AnotherWallet', balance: 20}
     ]
+
+    debits: IDebit[] = []
+    credits: ICredit[] = []
 
     constructor() {
         makeAutoObservable(this)
@@ -39,7 +57,13 @@ class Wallet {
         this.wallets[this.wallets.findIndex(wal => wal.id === walletUpdate.id)] = walletUpdate
     }
 
-    
+    AddDebit(debit: {id: number, comments:string, balance: number, walletId: number}) {
+        this.debits.push(debit)
+        const objIndex = this.wallets.findIndex(obj => obj.id == debit.walletId);
+        this.wallets[objIndex].balance = this.wallets[objIndex].balance + debit.balance
+        // console.log('balance into object'+ typeof(this.wallets[objIndex].balance))
+        // console.log("balance into debit"+ typeof(debit.balance))
+    }
 }
 
 export default new Wallet()
