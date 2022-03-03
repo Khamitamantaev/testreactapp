@@ -3,7 +3,8 @@ import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import wallet from '../../store/wallet';
-import AddModal from '../../components/modals/add-debit-modal'
+import AddDebitModal from '../../components/modals/add-debit-modal'
+import AddCreditModal from '../../components/modals/add-credit-modal'
 import { observer } from 'mobx-react-lite'
 
 const WalletPage = observer(() => {
@@ -44,15 +45,22 @@ const WalletPage = observer(() => {
                 </header>
                 <main>
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <AddModal walletId={wal?.id}></AddModal>
                         <div className="grid grid-cols-2 gap-4">
+
                             <div className="bg-blue-100">
-                                {wallet.debits.filter(debit => debit.walletId === wal?.id).map(debit => 
-                                <div key={debit.id}>
-                                    {debit.balance} comments: {debit.comments}
-                                </div>)}
+                                <AddDebitModal walletId={wal?.id}></AddDebitModal>
+                                {wallet.debits.filter(debit => debit.walletId === wal?.id).map(debit =>
+                                    <div key={debit.id}>
+                                        {debit.balance} comments: {debit.comments}
+                                    </div>)}
                             </div>
-                            <div className="bg-red-100">2nd col</div>
+                            <div className="bg-red-100">
+                                <AddCreditModal walletId={wal?.id} ></AddCreditModal>
+                                {wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
+                                    <div key={credit.id}>
+                                        {credit.balance} comments: {credit.comments}
+                                    </div>)}
+                            </div>
                         </div>
                         {/* /End replace */}
                     </div>

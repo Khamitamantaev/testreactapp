@@ -64,6 +64,14 @@ class Wallet {
         // console.log('balance into object'+ typeof(this.wallets[objIndex].balance))
         // console.log("balance into debit"+ typeof(debit.balance))
     }
+
+    AddCredit(credit: {id: number, comments:string, balance: number, walletId: number}) {
+        this.credits.push(credit)
+        const objIndex = this.wallets.findIndex(obj => obj.id == credit.walletId);
+        this.wallets[objIndex].balance = this.wallets[objIndex].balance - credit.balance
+        // console.log('balance into object'+ typeof(this.wallets[objIndex].balance))
+        // console.log("balance into debit"+ typeof(debit.balance))
+    }
 }
 
 export default new Wallet()
