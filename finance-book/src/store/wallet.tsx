@@ -30,6 +30,11 @@ class Wallet {
       this.wallets =  this.wallets.filter(wallet => wallet.id !== id)
     }
 
+    getWalletByID(id: number ) {
+        const wallet = this.wallets.find(wallet => wallet.id === id)
+        return wallet
+    }
+
     
 }
 
