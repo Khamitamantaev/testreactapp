@@ -9,9 +9,9 @@ export interface IWallet {
 
 class Wallet {
     wallets: IWallet[] = [
-        {id: 1, name: 'Crypto', balance: 1},
-        {id: 2, name: 'SimpleWallet', balance: 10},
-        {id: 3, name: 'AnotherWallet', balance: 20}
+        {id: 0, name: 'Crypto', balance: 1},
+        {id: 1, name: 'SimpleWallet', balance: 10},
+        {id: 2, name: 'AnotherWallet', balance: 20}
     ]
 
     constructor() {

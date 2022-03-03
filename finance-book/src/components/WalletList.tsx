@@ -3,6 +3,9 @@ import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import wallet from '../store/wallet';
+import DeleteModal from './modals/delete-modal';
+import UpdateModal from './modals/update-modal';
+import BasicModal from './modals/modal';
 
 const WalletList = observer(() => {
     return (
@@ -37,16 +40,17 @@ const WalletList = observer(() => {
                 </header>
                 <main>
                     <div className='mx-auto py-4 sm:px-6 lg:px-10'>
-                        <button>Добавить кошелек</button>
+                        <BasicModal/>
                     </div>
                     <div className="max-w-7xl mx-auto py-2 sm:px-6 lg:px-8">
                         {/* Replace with your content */}
                         <div className="px-4 py-6 sm:px-0">
-                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
-                                {wallet.wallets.map(wal =>
-                                    <div className='mt-4 ml-4' key={wal.id} >
+                            <div className="border-4 border-dashed border-gray-200 rounded-lg h-120" >
+                                {wallet.wallets.slice().reverse().map(wal =>
+                                    <div className=' ml-2' key={wal.id} >
                                         {wal.name + "      "}
                                         {wal.balance}
+                                        
                                         
                                         <button onClick={() => wallet.consoleWallet(wal.id)}>
                                         <Link
