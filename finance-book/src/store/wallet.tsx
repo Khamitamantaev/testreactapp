@@ -53,11 +53,21 @@ class Wallet {
         return wallet
     }
 
+    getDebitByID(id: number ) {
+        const debit = this.debits.find(debit => debit.id === id)
+        return debit
+    }
+
+    getCreditByID(id: number ) {
+        const credit = this.credits.find(credit => credit.id === id)
+        return credit
+    }
+
     updateWallet(walletUpdate: { id: number, name: string, balance: number}) {
         this.wallets[this.wallets.findIndex(wal => wal.id === walletUpdate.id)] = walletUpdate
     }
 
-    AddDebit(debit: {id: number, comments:string, balance: number, walletId: number}) {
+    AddDebit(debit: IDebit) {
         this.debits.push(debit)
         const objIndex = this.wallets.findIndex(obj => obj.id == debit.walletId);
         this.wallets[objIndex].balance = this.wallets[objIndex].balance + debit.balance
@@ -65,12 +75,29 @@ class Wallet {
         // console.log("balance into debit"+ typeof(debit.balance))
     }
 
-    AddCredit(credit: {id: number, comments:string, balance: number, walletId: number}) {
+    AddCredit(credit: ICredit) {
         this.credits.push(credit)
+        console.log(credit)
         const objIndex = this.wallets.findIndex(obj => obj.id == credit.walletId);
         this.wallets[objIndex].balance = this.wallets[objIndex].balance - credit.balance
         // console.log('balance into object'+ typeof(this.wallets[objIndex].balance))
         // console.log("balance into debit"+ typeof(debit.balance))
+    }
+    
+    deleteDebit(id: number) {
+        this.debits =  this.debits.filter(debit => debit.id !== id)
+    }
+
+    deleteCredit(id: number) {
+        this.credits =  this.credits.filter(credit => credit.id !== id)
+    }
+
+    updateDebit(debitUpdate: { id: number, comments: string, balance: number, walletId: number }) {
+        this.debits[this.debits.findIndex(wal => wal.id === debitUpdate.id)] = debitUpdate
+    }
+
+    updateCredit(creditUpdate: { id: number, comments: string, balance: number, walletId: number }) {
+        this.credits[this.credits.findIndex(wal => wal.id === creditUpdate.id)] = creditUpdate
     }
 }
 

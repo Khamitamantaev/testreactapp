@@ -5,6 +5,8 @@ import wallet from '../../store/wallet';
 import { useParams } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
 import AddDebitModal from '../../components/modals/add-debit-modal'
+import DeleteDebitModal from '../modals/delete-debit-modal';
+import UpdateDebitModal from '../modals/update-debit-modal';
     
 
 const Debit = observer(() => {
@@ -49,6 +51,8 @@ const Debit = observer(() => {
                             {walletID ? wallet.debits.slice().reverse().filter(debit => debit.walletId === wal?.id).map(debit =>
                                     <div key={debit.id}>
                                         {debit.balance} comments: {debit.comments}
+                                        <DeleteDebitModal id={debit.id}></DeleteDebitModal>
+                                        <UpdateDebitModal id={debit.id}></UpdateDebitModal>
                                     </div>): null}
                             </div>
                         </div>

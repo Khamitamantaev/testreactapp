@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -6,8 +6,6 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import wallet from '../../store/wallet';
-import { number } from 'yargs';
-
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -20,20 +18,44 @@ const style = {
     p: 4,
 };
 
-
-
-export default function AddModal(props: any) {
+export default function UpdateDebitModal(props: any) {
     const [open, setOpen] = React.useState(false);
-
     const [values, setValues] = useState({
         id: 0,
         comments: '',
         balance: 0,
-        walletId: props.walletId
-    } as {id: number, comments: string, balance: number, walletId: number})
+        walletId: 0
+    })
+
+    let DEBIT_ID: string = props.id
+
+    const CURRENT_VALUE = wallet.getDebitByID(parseInt(DEBIT_ID))!
+    
+    useEffect(() => setValues(CURRENT_VALUE), [open])
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        setValues({
+                id: CURRENT_VALUE.id,
+                comments: values.comments,
+                balance: values.balance,
+                walletId: CURRENT_VALUE.walletId,
+                [name]: value
+            } as unknown as {
+            id: number,
+            comments: string,
+            balance: number,
+            walletId: number
+        })
+    }
 
     const handleCloseClick = () => {
         setOpen(false);
+    }
+
+    const handleOpenClick = () => {
+        setOpen(true);
         setValues({
             id: 0,
             comments: '',
@@ -42,36 +64,14 @@ export default function AddModal(props: any) {
         })
     }
 
-    const handleOpenClick = () => {
-        setOpen(true);  
-    }
-
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target;
-        setValues({
-            id: wallet.credits.length,
-            comments: values.comments,
-            balance:  Number(values.balance),
-            walletId: props.walletId,
-            [name]: value
-        } as {
-            id: number,
-            comments: string,
-            balance: number,
-            walletId: number
-        })
-    }
-
-
-    const onClick = () => {
-        console.log(values)
-        wallet.AddCredit(values)
-        handleCloseClick()
+    const updateDebit = () => {
+        wallet.updateDebit(values)
+         setOpen(false)
     }
 
     return (
         <div>
-            <Button onClick={handleOpenClick}>Добавить расход</Button>
+            <Button onClick={handleOpenClick}>Update Debit</Button>
             <Modal
                 open={open}
                 onClose={handleCloseClick}
@@ -82,17 +82,17 @@ export default function AddModal(props: any) {
                     <Grid container spacing={2} columns={{}}>
                         <Grid item xs={6}>
                             <Typography id="modal-modal-title" variant="h6" component="h2">
-                                Добавить расход
+                                Обновить доход
                             </Typography>
-                            <br />
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
-                                type="number"
+                                type="text"
                                 label="balance"
                                 variant="outlined"
                                 name="balance"
                                 value={values.balance}
                                 onChange={handleInputChange}
+                                disabled
                             />
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
@@ -103,10 +103,11 @@ export default function AddModal(props: any) {
                                 value={values.comments}
                                 onChange={handleInputChange}
                             />
+                           
                         </Grid>
                         <Grid item xs={6}>
-                            <Button onClick={onClick} variant="contained" color="primary">
-                                Добавить
+                            <Button onClick={updateDebit} variant="contained" color="primary">
+                                Обновить
                             </Button>
                             <Button onClick={handleCloseClick} variant="contained" color="primary">
                                 Отмена
@@ -115,6 +116,6 @@ export default function AddModal(props: any) {
                     </Grid>
                 </Box>
             </Modal>
-        </div >
+        </div>
     );
 }

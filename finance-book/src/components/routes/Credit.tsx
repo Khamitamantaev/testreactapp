@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import wallet from '../../store/wallet';
 import AddCreditModal from '../../components/modals/add-credit-modal'
 import { observer } from 'mobx-react-lite';
+import DeleteCreditModal from '../modals/delete-credit-modal';
+import UpdateCreditModal from '../modals/update-credit-modal';
 
 const Credit = observer(() => {
 
@@ -50,6 +52,8 @@ const Credit = observer(() => {
                             {walletID ? wallet.credits.slice().reverse().filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments}
+                                        <DeleteCreditModal id={credit.id}></DeleteCreditModal>
+                                        <UpdateCreditModal id={credit.id}></UpdateCreditModal>
                                     </div>): null}
                             </div>
                         </div>
