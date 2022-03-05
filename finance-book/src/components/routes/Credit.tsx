@@ -16,7 +16,9 @@ const Credit = observer(() => {
     let walletID: string = params.walletId!
 
     const [wal, setWal] = useState(wallet.getWalletByID(parseInt(walletID)))
-
+    const [currentCredit, setCurrentCredit] = useState({
+        id: 0
+    })
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenAddModal, setIsOpenAddModal] = useState(false)
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
@@ -29,10 +31,6 @@ const Credit = observer(() => {
         walletId: wal?.id
     } as { id: number, comments: string, balance: number, walletId: number })
 
-
-    function getMaxOfArray(numArray: number[]) {
-        return Math.max.apply(null, numArray);
-      }
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -66,16 +64,11 @@ const Credit = observer(() => {
                 balance: number,
                 walletId: number
             })
-        }
-        
- 
-        
+        }   
     }
-
     const onClickDeleteCredit = (id: number) => {
-        console.log(id)
-        // wallet.deleteCredit(id)
-        // setIsOpenDeleteModal(false)
+        wallet.deleteCredit(id)
+        setIsOpenDeleteModal(false)
     }
 
     const onClickAddCredit = () => {
@@ -87,7 +80,11 @@ const Credit = observer(() => {
         setIsOpenAddModal(true)
     }
 
-    const handleDialogOpenDelete = () => {
+    const handleDialogOpenDelete = (id: number) => {
+        setCurrentCredit({
+            id: id
+        })
+        console.log("current: " + JSON.stringify(currentCredit))
         setIsOpenDeleteModal(true)
     }
 
@@ -158,9 +155,8 @@ const Credit = observer(() => {
                                 {walletID ? wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments} id: {credit.id}
-                                        <CustomDialog isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={handleDialogOpenDelete} buttontext={'Удалить расход'}>
-                                                
-                                            <Button onClick={() => onClickDeleteCredit(credit.id)}>Удалить</Button>
+                                        <CustomDialog isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() =>handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
+                                            <Button onClick={() => onClickDeleteCredit(currentCredit.id)}>Удалить</Button>
                                             <Button onClick={handleDialogClose}>Отмена</Button>
                                         </CustomDialog>
                                         <UpdateCreditModal id={credit.id}></UpdateCreditModal>
