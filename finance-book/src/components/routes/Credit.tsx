@@ -35,7 +35,7 @@ const Credit = observer(() => {
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         let maxValue;
-        if(wallet.credits.length === 0) {
+        if (wallet.credits.length === 0) {
             maxValue = 0
             setValues({
                 id: maxValue + 1,
@@ -64,7 +64,7 @@ const Credit = observer(() => {
                 balance: number,
                 walletId: number
             })
-        }   
+        }
     }
     const onClickDeleteCredit = (id: number) => {
         wallet.deleteCredit(id)
@@ -74,6 +74,16 @@ const Credit = observer(() => {
     const onClickAddCredit = () => {
         wallet.AddCredit(values)
         setIsOpenAddModal(false)
+    }
+
+    const onClickUpdateCredit = (id: number) => {
+        wallet.updateCredit({
+            id: id,
+            comments: values.comments,
+            balance: values.balance,
+            walletId: values.walletId
+        })
+        setIsOpenUpdateModal(false)
     }
 
     const handleDialogOpenAdd = () => {
@@ -88,7 +98,10 @@ const Credit = observer(() => {
         setIsOpenDeleteModal(true)
     }
 
-    const handleDialogOpenUpdate = () => {
+    const handleDialogOpenUpdate = (id: number) => {
+        setCurrentCredit({
+            id: id
+        })
         setIsOpenUpdateModal(true)
     }
 
@@ -154,9 +167,30 @@ const Credit = observer(() => {
                                 {walletID ? wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments} id: {credit.id}
-                                        <CustomDialog handleSubmit={() => onClickDeleteCredit(currentCredit.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() =>handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
+                                        <CustomDialog handleSubmit={() => onClickDeleteCredit(currentCredit.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() => handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
                                         </CustomDialog>
-                                        <UpdateCreditModal id={credit.id}></UpdateCreditModal>
+                                        <CustomDialog handleSubmit={() => onClickUpdateCredit(currentCredit.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit.id)} buttontext={'Обновить расход'}>
+                                            <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="balance"
+                                                variant="outlined"
+                                                name="balance"
+                                                value={values.balance}
+                                                onChange={handleInputChange}
+                                                disabled
+                                            />
+                                            <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="comments"
+                                                variant="outlined"
+                                                name="comments"
+                                                value={values.comments}
+                                                onChange={handleInputChange}
+                                            />
+                                        </CustomDialog>
+                                        {/* <UpdateCreditModal id={credit.id}></UpdateCreditModal> */}
                                     </div>) : null}
                             </div>
                         </div>
