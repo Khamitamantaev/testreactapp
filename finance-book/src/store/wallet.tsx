@@ -89,6 +89,7 @@ class Wallet {
     }
 
     deleteCredit(id: number) {
+        console.log("delete:" + id)
         this.credits =  this.credits.filter(credit => credit.id !== id)
     }
 

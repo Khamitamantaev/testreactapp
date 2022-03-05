@@ -7,6 +7,7 @@ import DeleteModal from './modals/delete-modal';
 import UpdateModal from './modals/update-modal';
 import BasicModal from './modals/modal';
 import Button from '@mui/material/Button';
+import { CustomDialog } from './modals/Dialog';
 
 const WalletList = observer(() => {
     return (
@@ -59,7 +60,6 @@ const WalletList = observer(() => {
                                                 </div>
                                             </Link>
                                         </Button>
-
                                         <DeleteModal id={wal.id} />
                                         <UpdateModal id={wal.id} />
 
