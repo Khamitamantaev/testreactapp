@@ -129,7 +129,7 @@ const Credit = observer(() => {
                 </header>
                 <main>
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                        <CustomDialog isOpen={isOpenAddModal} handleClose={handleDialogClose} title='Add Credit' subtitle={'Добавить расход'} handleOpen={handleDialogOpenAdd} buttontext={'Добавить расход'}>
+                        <CustomDialog handleSubmit={onClickAddCredit} isOpen={isOpenAddModal} handleClose={handleDialogClose} title='Add Credit' subtitle={'Добавить расход'} handleOpen={handleDialogOpenAdd} buttontext={'Добавить расход'}>
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
                                 type="number"
@@ -148,16 +148,13 @@ const Credit = observer(() => {
                                 value={values.comments}
                                 onChange={handleInputChange}
                             />
-                            <Button onClick={onClickAddCredit}>Добавить</Button>
                         </CustomDialog>
                         <div className="px-4 py-6 sm:px-0">
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
                                 {walletID ? wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments} id: {credit.id}
-                                        <CustomDialog isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() =>handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
-                                            <Button onClick={() => onClickDeleteCredit(currentCredit.id)}>Удалить</Button>
-                                            <Button onClick={handleDialogClose}>Отмена</Button>
+                                        <CustomDialog handleSubmit={() => onClickDeleteCredit(currentCredit.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() =>handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
                                         </CustomDialog>
                                         <UpdateCreditModal id={credit.id}></UpdateCreditModal>
                                     </div>) : null}

@@ -17,7 +17,8 @@ type CustomDialogTypes = {
     title: string,
     subtitle: string,
     children: React.ReactNode,
-    buttontext: string
+    buttontext: string,
+    handleSubmit: any
 }
 
 
@@ -28,7 +29,8 @@ export const CustomDialog = ({
     title,
     subtitle,
     children,
-    buttontext
+    buttontext,
+    handleSubmit
 }: CustomDialogTypes ) => 
 
 {
@@ -48,6 +50,7 @@ export const CustomDialog = ({
                     {children}
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleSubmit} color='primary'>Submit</Button>
                     <Button onClick={handleClose} color='primary'>Close</Button>
                 </DialogActions>
             </Dialog>
