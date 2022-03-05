@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import wallet from '../../store/wallet';
 import { observer } from 'mobx-react-lite';
-import UpdateCreditModal from '../modals/update-credit-modal';
 import { CustomDialog } from '../modals/Dialog';
 import Button from '@mui/material/Button';
 import { TextField, Typography } from '@mui/material';
