@@ -2,7 +2,7 @@ import React, { ChangeEvent, useState } from 'react'
 import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import wallet from '../../store/wallet';
+import wallet, { ICredit } from '../../store/wallet';
 import { observer } from 'mobx-react-lite';
 import { CustomDialog } from '../modals/Dialog';
 import Button from '@mui/material/Button';
@@ -15,9 +15,7 @@ const Credit = observer(() => {
     let walletID: string = params.walletId!
 
     const [wal, setWal] = useState(wallet.getWalletByID(parseInt(walletID)))
-    const [currentCredit, setCurrentCredit] = useState({
-        id: 0
-    })
+
     const [isOpen, setIsOpen] = useState(false)
     const [isOpenAddModal, setIsOpenAddModal] = useState(false)
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
@@ -31,8 +29,9 @@ const Credit = observer(() => {
     } as { id: number, comments: string, balance: number, walletId: number })
 
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleInputCreateChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
+        console.log(name, value)
         let maxValue;
         if (wallet.credits.length === 0) {
             maxValue = 0
@@ -65,6 +64,25 @@ const Credit = observer(() => {
             })
         }
     }
+
+    const handleInputUpdateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        setValues({
+            id: values.id,
+            comments: values.comments,
+            balance: Number(values.balance),
+            walletId: wal?.id,
+            [name]: value
+        } as {
+            id: number,
+            comments: string,
+            balance: number,
+            walletId: number
+        })
+    }
+
+
     const onClickDeleteCredit = (id: number) => {
         wallet.deleteCredit(id)
         setIsOpenDeleteModal(false)
@@ -76,11 +94,12 @@ const Credit = observer(() => {
     }
 
     const onClickUpdateCredit = (id: number) => {
+        console.log(values)
         wallet.updateCredit({
             id: id,
-            comments: values.comments,
             balance: values.balance,
-            walletId: values.walletId
+            comments: values.comments,
+            walletId: wal?.id!
         })
         setIsOpenUpdateModal(false)
     }
@@ -89,17 +108,17 @@ const Credit = observer(() => {
         setIsOpenAddModal(true)
     }
 
-    const handleDialogOpenDelete = (id: number) => {
-        setCurrentCredit({
-            id: id
+    const handleDialogOpenDelete = (credit: ICredit) => {
+        setValues({
+            ...credit
         })
-        console.log("current: " + JSON.stringify(currentCredit))
+        console.log("current: " + JSON.stringify(values))
         setIsOpenDeleteModal(true)
     }
 
-    const handleDialogOpenUpdate = (id: number) => {
-        setCurrentCredit({
-            id: id
+    const handleDialogOpenUpdate = (credit: ICredit) => {
+        setValues({
+            ...credit
         })
         setIsOpenUpdateModal(true)
     }
@@ -149,7 +168,7 @@ const Credit = observer(() => {
                                 variant="outlined"
                                 name="balance"
                                 value={values.balance}
-                                onChange={handleInputChange}
+                                onChange={handleInputCreateChange}
                             />
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
@@ -158,7 +177,7 @@ const Credit = observer(() => {
                                 variant="outlined"
                                 name="comments"
                                 value={values.comments}
-                                onChange={handleInputChange}
+                                onChange={handleInputCreateChange}
                             />
                         </CustomDialog>
                         <div className="px-4 py-6 sm:px-0">
@@ -166,9 +185,9 @@ const Credit = observer(() => {
                                 {walletID ? wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
                                         {credit.balance} comments: {credit.comments} id: {credit.id}
-                                        <CustomDialog handleSubmit={() => onClickDeleteCredit(currentCredit.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() => handleDialogOpenDelete(credit.id)} buttontext={'Удалить расход'}>
+                                        <CustomDialog handleSubmit={() => onClickDeleteCredit(values.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() => handleDialogOpenDelete(credit)} buttontext={'Удалить расход'}>
                                         </CustomDialog>
-                                        <CustomDialog handleSubmit={() => onClickUpdateCredit(currentCredit.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit.id)} buttontext={'Обновить расход'}>
+                                        <CustomDialog handleSubmit={() => onClickUpdateCredit(values.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit)} buttontext={'Обновить расход'}>
                                             <TextField
                                                 style={{ width: "200px", margin: "5px" }}
                                                 type="text"
@@ -176,7 +195,7 @@ const Credit = observer(() => {
                                                 variant="outlined"
                                                 name="balance"
                                                 value={values.balance}
-                                                onChange={handleInputChange}
+                                                onChange={handleInputUpdateChange}
                                                 disabled
                                             />
                                             <TextField
@@ -186,7 +205,7 @@ const Credit = observer(() => {
                                                 variant="outlined"
                                                 name="comments"
                                                 value={values.comments}
-                                                onChange={handleInputChange}
+                                                onChange={handleInputUpdateChange}
                                             />
                                         </CustomDialog>
                                         {/* <UpdateCreditModal id={credit.id}></UpdateCreditModal> */}
