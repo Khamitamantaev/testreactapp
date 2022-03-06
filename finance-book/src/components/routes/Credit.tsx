@@ -14,6 +14,10 @@ const Credit = observer(() => {
     const [isOpenAddModal, setIsOpenAddModal] = useState(false)
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false)
+    const [commentsDirty, setCommentsDirty] = useState(false)
+    const [balanceDirty, setBalanceDirty] = useState(false)
+    const [commentsError, setCommentsError] = useState('')
+    const [balanceError, setBalanceError] = useState('')
 
     const [values, setValues] = useState({
         id: 0,
@@ -25,7 +29,26 @@ const Credit = observer(() => {
 
     const handleInputCreateChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        console.log(name, value)
+
+        const re = /^[0-9\b]+$/;
+        const reText = /^[a-zA-Z0-9]*$/;
+        switch (name) {
+            case 'balance':
+                if (!re.test(String(value))) {
+                    setBalanceError('Некорректный баланс')
+                } else {
+                    setBalanceError('')
+                }
+                break;
+            case 'comments':
+                if (!reText.test(String(value))) {
+                    setCommentsError('Некорректный комментарий')
+                } else {
+                    setCommentsError('')
+                }
+                break;
+        }
+
         let maxValue;
         if (wallet.credits.length === 0) {
             maxValue = 0
@@ -60,7 +83,26 @@ const Credit = observer(() => {
     }
 
     const handleInputUpdateChange = (event: ChangeEvent<HTMLInputElement>) => {
+
         const { name, value } = event.target;
+        const re = /^[0-9\b]+$/;
+        const reText = /^[a-zA-Z0-9]*$/;
+        switch (name) {
+            case 'balance':
+                if (!re.test(String(value))) {
+                    setBalanceError('Некорректный баланс')
+                } else {
+                    setBalanceError('')
+                }
+                break;
+            case 'comments':
+                if (!reText.test(String(value))) {
+                    setCommentsError('Некорректный комментарий')
+                } else {
+                    setCommentsError('')
+                }
+                break;
+        }
         console.log(name, value)
         setValues({
             id: values.id,
@@ -84,6 +126,12 @@ const Credit = observer(() => {
 
     const onClickAddCredit = () => {
         wallet.AddCredit(values)
+        setValues({
+            id: 0,
+            comments: '',
+            balance: 0,
+            walletId: wal?.id!,
+        })
         setIsOpenAddModal(false)
     }
 
@@ -124,6 +172,18 @@ const Credit = observer(() => {
     }
 
 
+    const blurHandler = (e: any) => {
+        switch (e.target.name) {
+            case "balance":
+                setBalanceDirty(true)
+                break;
+            case 'comments':
+                setCommentsDirty(true)
+                break;
+        }
+    }
+
+
     return (
         <>
             <div className="min-h-full">
@@ -155,15 +215,18 @@ const Credit = observer(() => {
                 <main>
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                         <CustomDialog handleSubmit={onClickAddCredit} isOpen={isOpenAddModal} handleClose={handleDialogClose} title='Add Credit' subtitle={'Добавить расход'} handleOpen={handleDialogOpenAdd} buttontext={'Добавить расход'}>
+                            {(balanceDirty && balanceError) && <div style={{ color: 'red' }}>{balanceError}</div>}
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
-                                type="number"
+                                type="text"
                                 label="balance"
                                 variant="outlined"
                                 name="balance"
                                 value={values.balance}
                                 onChange={handleInputCreateChange}
+                                onBlur={(e) => blurHandler(e)}
                             />
+                            {(commentsDirty && commentsError) && <div style={{ color: 'red' }}>{commentsError}</div>}
                             <TextField
                                 style={{ width: "200px", margin: "5px" }}
                                 type="text"
@@ -172,6 +235,7 @@ const Credit = observer(() => {
                                 name="comments"
                                 value={values.comments}
                                 onChange={handleInputCreateChange}
+                                onBlur={(e) => blurHandler(e)}
                             />
                         </CustomDialog>
                         <div className="px-4 py-6 sm:px-0">
@@ -182,6 +246,7 @@ const Credit = observer(() => {
                                         <CustomDialog handleSubmit={() => onClickDeleteCredit(values.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() => handleDialogOpenDelete(credit)} buttontext={'Удалить расход'}>
                                         </CustomDialog>
                                         <CustomDialog handleSubmit={() => onClickUpdateCredit(values.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit)} buttontext={'Обновить расход'}>
+                                        {(balanceDirty && balanceError) && <div style={{ color: 'red' }}>{balanceError}</div>}
                                             <TextField
                                                 style={{ width: "200px", margin: "5px" }}
                                                 type="text"
@@ -190,8 +255,9 @@ const Credit = observer(() => {
                                                 name="balance"
                                                 value={values.balance}
                                                 onChange={handleInputUpdateChange}
-                                                disabled
+                                                onBlur={(e) => blurHandler(e)}
                                             />
+                                            {(commentsDirty && commentsError) && <div style={{ color: 'red' }}>{commentsError}</div>}
                                             <TextField
                                                 style={{ width: "200px", margin: "5px" }}
                                                 type="text"
@@ -200,6 +266,7 @@ const Credit = observer(() => {
                                                 name="comments"
                                                 value={values.comments}
                                                 onChange={handleInputUpdateChange}
+                                                onBlur={(e) => blurHandler(e)}
                                             />
                                         </CustomDialog>
                                         {/* <UpdateCreditModal id={credit.id}></UpdateCreditModal> */}

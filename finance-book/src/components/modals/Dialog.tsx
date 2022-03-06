@@ -30,7 +30,7 @@ export const CustomDialog = ({
     subtitle,
     children,
     buttontext,
-    handleSubmit
+    handleSubmit,
 }: CustomDialogTypes ) => 
 
 {
