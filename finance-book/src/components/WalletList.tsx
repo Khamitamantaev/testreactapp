@@ -203,7 +203,7 @@ const WalletList = observer(() => {
                                         </Button>
                                         <CustomDialog handleSubmit={() => onClickDeleteWallet(values.id)} isOpen={isOpenDeleteModal} handleClose={handleCloseClick} title='Delete Wallet' subtitle={'Удалить кошелек?'} handleOpen={() => handleDialogOpenDelete(wal)} buttontext={'Удалить кошелек'} >
                                         </CustomDialog>
-                                        <CustomDialog handleSubmit={() => onClickUpdateWallet(values.id)} isOpen={isOpenUpdateModal} handleClose={handleCloseClick} title='Delete Wallet' subtitle={'Обновить кошелек?'} handleOpen={() => handleDialogOpenUpdate(wal)} buttontext={'Обновить кошелек'}>
+                                        <CustomDialog handleSubmit={() => onClickUpdateWallet(values.id)} isOpen={isOpenUpdateModal} handleClose={handleCloseClick} title='Update Wallet' subtitle={'Обновить кошелек?'} handleOpen={() => handleDialogOpenUpdate(wal)} buttontext={'Обновить кошелек'}>
                                         <TextField
                                                 style={{ width: "200px", margin: "5px" }}
                                                 type="text"

@@ -250,10 +250,10 @@ const Credit = observer(() => {
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
                                 {walletID ? wallet.credits.filter(credit => credit.walletId === wal?.id).map(credit =>
                                     <div key={credit.id}>
-                                        {credit.balance} comments: {credit.comments} id: {credit.id}
+                                        {credit.balance} comments: {credit.comments}
                                         <CustomDialog handleSubmit={() => onClickDeleteCredit(values.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Удалить расход?'} handleOpen={() => handleDialogOpenDelete(credit)} buttontext={'Удалить расход'}>
                                         </CustomDialog>
-                                        <CustomDialog handleSubmit={() => onClickUpdateCredit(values.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit)} buttontext={'Обновить расход'}>
+                                        <CustomDialog handleSubmit={() => onClickUpdateCredit(values.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Update Credit' subtitle={'Обновить расход?'} handleOpen={() => handleDialogOpenUpdate(credit)} buttontext={'Обновить расход'}>
                                         {(balanceDirty && balanceError) && <div style={{ color: 'red' }}>{balanceError}</div>}
                                             <TextField
                                                 style={{ width: "200px", margin: "5px" }}
