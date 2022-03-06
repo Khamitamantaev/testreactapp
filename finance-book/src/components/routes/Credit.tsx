@@ -36,15 +36,19 @@ const Credit = observer(() => {
             case 'balance':
                 if (!re.test(String(value))) {
                     setBalanceError('Некорректный баланс')
+                    wallet.setIsDisabled(true)
                 } else {
                     setBalanceError('')
+                    wallet.setIsDisabled(false)
                 }
                 break;
             case 'comments':
                 if (!reText.test(String(value))) {
                     setCommentsError('Некорректный комментарий')
+                    wallet.setIsDisabled(true)
                 } else {
                     setCommentsError('')
+                    wallet.setIsDisabled(false)
                 }
                 break;
         }
@@ -91,15 +95,19 @@ const Credit = observer(() => {
             case 'balance':
                 if (!re.test(String(value))) {
                     setBalanceError('Некорректный баланс')
+                    wallet.setIsDisabled(true)
                 } else {
                     setBalanceError('')
+                    wallet.setIsDisabled(false)
                 }
                 break;
             case 'comments':
                 if (!reText.test(String(value))) {
                     setCommentsError('Некорректный комментарий')
+                    wallet.setIsDisabled(true)
                 } else {
                     setCommentsError('')
+                    wallet.setIsDisabled(false)
                 }
                 break;
         }

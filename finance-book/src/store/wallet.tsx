@@ -29,11 +29,17 @@ class Wallet {
         {id: 2, name: 'AnotherWallet', balance: 20}
     ]
 
+    isDisabled: boolean = false
+
     debits: IDebit[] = []
     credits: ICredit[] = []
 
     constructor() {
         makeAutoObservable(this)
+    }
+
+    setIsDisabled(value: boolean) {
+        this.isDisabled = value
     }
 
     AddWallet(wallet: {id: number, name:string, balance: number}) {

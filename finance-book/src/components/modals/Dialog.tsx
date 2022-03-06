@@ -1,6 +1,7 @@
 import React from 'react'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { observer } from 'mobx-react-lite';
 import {
     Button,
     Dialog,
@@ -9,6 +10,7 @@ import {
     DialogContentText,
     DialogTitle
 } from '@mui/material'
+import wallet from '../../store/wallet';
 
 type CustomDialogTypes = {
     isOpen: boolean,
@@ -22,7 +24,7 @@ type CustomDialogTypes = {
 }
 
 
-export const CustomDialog = ({
+export const CustomDialog = observer (({
     isOpen ,
     handleOpen,
     handleClose,
@@ -50,11 +52,11 @@ export const CustomDialog = ({
                     {children}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleSubmit} color='primary'>Submit</Button>
+                    <Button disabled={wallet.isDisabled} onClick={handleSubmit} color='primary'>Submit</Button>
                     <Button onClick={handleClose} color='primary'>Close</Button>
                 </DialogActions>
             </Dialog>
         </>
     )
-}
+})
 
