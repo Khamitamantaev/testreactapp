@@ -1,21 +1,132 @@
-import React,{ useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import logo from '../../assets/logo.png';
 import { Link } from "react-router-dom";
-import wallet from '../../store/wallet';
 import { useParams } from "react-router-dom";
-import { observer } from 'mobx-react-lite'
-import AddDebitModal from '../../components/modals/add-debit-modal'
-import DeleteDebitModal from '../modals/delete-debit-modal';
-import UpdateDebitModal from '../modals/update-debit-modal';
-    
+import wallet, { IDebit } from '../../store/wallet';
+import { observer } from 'mobx-react-lite';
+import { CustomDialog } from '../modals/Dialog';
+import { TextField, Typography } from '@mui/material';
 
 const Debit = observer(() => {
-    
+
     const params = useParams();
 
     let walletID: string = params.walletId!
 
     const [wal, setWal] = useState(wallet.getWalletByID(parseInt(walletID)))
+    const [isOpenAddModal, setIsOpenAddModal] = useState(false)
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
+    const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false)
+
+    const [values, setValues] = useState({
+        id: 0,
+        comments: '',
+        balance: 0,
+        walletId: wal?.id
+    } as { id: number, comments: string, balance: number, walletId: number })
+
+
+    const handleInputCreateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        let maxValue;
+        if (wallet.debits.length === 0) {
+            maxValue = 0
+            setValues({
+                id: maxValue + 1,
+                comments: values.comments,
+                balance: Number(values.balance),
+                walletId: wal?.id,
+                [name]: value
+            } as {
+                id: number,
+                comments: string,
+                balance: number,
+                walletId: number
+            })
+        }
+        else {
+            maxValue = Math.max(...wallet.debits.map(debit => debit.id))
+            setValues({
+                id: maxValue + 1,
+                comments: values.comments,
+                balance: Number(values.balance),
+                walletId: wal?.id,
+                [name]: value
+            } as {
+                id: number,
+                comments: string,
+                balance: number,
+                walletId: number
+            })
+        }
+    }
+
+    const handleInputUpdateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        setValues({
+            id: values.id,
+            comments: values.comments,
+            balance: Number(values.balance),
+            walletId: wal?.id,
+            [name]: value
+        } as {
+            id: number,
+            comments: string,
+            balance: number,
+            walletId: number
+        })
+    }
+
+
+    const onClickDeleteDebit = (id: number) => {
+        wallet.deleteDebit(id)
+        setIsOpenDeleteModal(false)
+    }
+
+    const onClickAdddebit = () => {
+        wallet.AddDebit(values)
+        setIsOpenAddModal(false)
+    }
+
+    const onClickUpdatedebit = (id: number) => {
+        console.log(values)
+        wallet.updateDebit({
+            id: id,
+            balance: values.balance,
+            comments: values.comments,
+            walletId: wal?.id!
+        })
+        setIsOpenUpdateModal(false)
+    }
+
+    const handleDialogOpenAdd = () => {
+        setIsOpenAddModal(true)
+    }
+
+    const handleDialogOpenDelete = (debit: IDebit) => {
+        setValues({
+            ...debit
+        })
+        console.log("current: " + JSON.stringify(values))
+        setIsOpenDeleteModal(true)
+    }
+
+    const handleDialogOpenUpdate = (debit: IDebit) => {
+        setValues({
+            ...debit
+        })
+        setIsOpenUpdateModal(true)
+    }
+
+    const handleDialogClose = () => {
+        setIsOpenAddModal(false)
+        setIsOpenDeleteModal(false)
+        setIsOpenUpdateModal(false)
+    }
+
+
     return (
         <>
             <div className="min-h-full">
@@ -31,29 +142,71 @@ const Debit = observer(() => {
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/">WalletList</Link>
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/wallet">Wallet</Link>
                                         <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/debit">Debit</Link>
-                                        <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/credit">Credit</Link>
+                                        <Link className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" to="/debit">debit</Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {/* Mobile menu, show/hide based on menu state. */}
                 </nav>
                 <header className="bg-white shadow">
                     <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <h1 className="text-3xl font-bold text-gray-900">Debit</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">debit</h1>
                     </div>
                 </header>
                 <main>
                     <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-                    <AddDebitModal walletId={wal?.id}></AddDebitModal>
+                        <CustomDialog handleSubmit={onClickAdddebit} isOpen={isOpenAddModal} handleClose={handleDialogClose} title='Add Debit' subtitle={'Добавить расход'} handleOpen={handleDialogOpenAdd} buttontext={'Добавить доход'}>
+                            <TextField
+                                style={{ width: "200px", margin: "5px" }}
+                                type="number"
+                                label="balance"
+                                variant="outlined"
+                                name="balance"
+                                value={values.balance}
+                                onChange={handleInputCreateChange}
+                            />
+                            <TextField
+                                style={{ width: "200px", margin: "5px" }}
+                                type="text"
+                                label="comments"
+                                variant="outlined"
+                                name="comments"
+                                value={values.comments}
+                                onChange={handleInputCreateChange}
+                            />
+                        </CustomDialog>
                         <div className="px-4 py-6 sm:px-0">
                             <div className="border-4 border-dashed border-gray-200 rounded-lg h-96" >
-                            {walletID ? wallet.debits.slice().reverse().filter(debit => debit.walletId === wal?.id).map(debit =>
+                                {walletID ? wallet.debits.filter(debit => debit.walletId === wal?.id).map(debit =>
                                     <div key={debit.id}>
-                                        {debit.balance} comments: {debit.comments}
-                                        <DeleteDebitModal id={debit.id}></DeleteDebitModal>
-                                        <UpdateDebitModal id={debit.id}></UpdateDebitModal>
-                                    </div>): null}
+                                        {debit.balance} comments: {debit.comments} id: {debit.id}
+                                        <CustomDialog handleSubmit={() => onClickDeleteDebit(values.id)} isOpen={isOpenDeleteModal} handleClose={handleDialogClose} title='Delete Debit' subtitle={'Удалить доход?'} handleOpen={() => handleDialogOpenDelete(debit)} buttontext={'Удалить доход'}>
+                                        </CustomDialog>
+                                        <CustomDialog handleSubmit={() => onClickUpdatedebit(values.id)} isOpen={isOpenUpdateModal} handleClose={handleDialogClose} title='Delete Debit' subtitle={'Обновить доход?'} handleOpen={() => handleDialogOpenUpdate(debit)} buttontext={'Обновить доход'}>
+                                            <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="balance"
+                                                variant="outlined"
+                                                name="balance"
+                                                value={values.balance}
+                                                onChange={handleInputUpdateChange}
+                                                disabled
+                                            />
+                                            <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="comments"
+                                                variant="outlined"
+                                                name="comments"
+                                                value={values.comments}
+                                                onChange={handleInputUpdateChange}
+                                            />
+                                        </CustomDialog>
+                                        {/* <UpdatedebitModal id={debit.id}></UpdatedebitModal> */}
+                                    </div>) : null}
                             </div>
                         </div>
                         {/* /End replace */}

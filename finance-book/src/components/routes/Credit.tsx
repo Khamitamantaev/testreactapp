@@ -5,18 +5,12 @@ import { useParams } from "react-router-dom";
 import wallet, { ICredit } from '../../store/wallet';
 import { observer } from 'mobx-react-lite';
 import { CustomDialog } from '../modals/Dialog';
-import Button from '@mui/material/Button';
 import { TextField, Typography } from '@mui/material';
 
 const Credit = observer(() => {
-
     const params = useParams();
-
     let walletID: string = params.walletId!
-
     const [wal, setWal] = useState(wallet.getWalletByID(parseInt(walletID)))
-
-    const [isOpen, setIsOpen] = useState(false)
     const [isOpenAddModal, setIsOpenAddModal] = useState(false)
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
     const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false)
