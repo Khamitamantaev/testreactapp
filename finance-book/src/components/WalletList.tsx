@@ -1,15 +1,136 @@
-import React from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import logo from '../assets/logo.png';
 import { Link } from "react-router-dom";
 import { observer } from 'mobx-react-lite'
-import wallet from '../store/wallet';
-import DeleteModal from './modals/delete-modal';
-import UpdateModal from './modals/update-modal';
-import BasicModal from './modals/modal';
+import wallet, { IWallet } from '../store/wallet';
 import Button from '@mui/material/Button';
 import { CustomDialog } from './modals/Dialog';
-
+import TextField from '@mui/material/TextField';
 const WalletList = observer(() => {
+
+    const [isOpenAddModal, setIsOpenAddModal] = useState(false)
+    const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false)
+    const [isOpenUpdateModal, setIsOpenUpdateModal] = useState(false)
+    const [values, setValues] = useState({
+        id: 0,
+        name: '',
+        balance: 0
+    })
+
+    const handleCloseClick = () => {
+        setIsOpenAddModal(false);
+        setIsOpenDeleteModal(false)
+        setIsOpenUpdateModal(false)
+        setValues({
+            id: 0,
+            name: '',
+            balance: 0
+        })
+    }
+
+    const handleOpenAddClick = () => {
+        setIsOpenAddModal(true);
+        setValues({
+            id: 0,
+            name: '',
+            balance: 0
+        })
+    }
+
+    const handleInputUpdateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        setValues({
+            id: values.id,
+            name: values.name,
+            balance: Number(values.balance),
+            [name]: value
+        } as {
+            id: number,
+            name: string,
+            balance: number,
+        })
+    }
+
+
+
+    const handleInputCreateChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        console.log(name, value)
+        let maxValue;
+        if (wallet.wallets.length === 0) {
+            maxValue = 0
+            setValues({
+                id: maxValue + 1,
+                name: values.name,
+                balance: Number(values.balance),
+                [name]: value
+            } as {
+                id: number,
+                name: string,
+                balance: number,
+            })
+        }
+        else {
+            maxValue = Math.max(...wallet.wallets.map(wallet => wallet.id))
+            setValues({
+                id: maxValue + 1,
+                name: values.name,
+                balance: Number(values.balance),
+                [name]: value
+            } as {
+                id: number,
+                name: string,
+                balance: number,
+            })
+        }
+    }
+
+
+    const onClick = () => {
+        wallet.AddWallet(values)
+        console.log(values)
+        handleCloseClick()
+        setValues({
+            id: 0,
+            name: '',
+            balance: 0
+        })
+    }
+
+    const onClickUpdateWallet = (id: number) => {
+        console.log(values)
+        wallet.updateWallet({
+            id: id,
+            name: values.name,
+            balance: values.balance,
+        })
+        setIsOpenUpdateModal(false)
+    }
+
+    const handleDialogOpenDelete = (wallet: IWallet) => {
+        setValues({
+            ...wallet
+        })
+        console.log("current: " + JSON.stringify(values))
+        setIsOpenDeleteModal(true)
+    }
+
+    const handleDialogOpenUpdate = (wallet: IWallet) => {
+        setValues({
+            ...wallet
+        })
+        setIsOpenUpdateModal(true)
+    }
+
+
+    const onClickDeleteWallet = (id: number) => {
+        console.log(id)
+        wallet.deleteWallet(id)
+        setIsOpenDeleteModal(false)
+    }
+
+
     return (
         <>
             <div className="min-h-full">
@@ -41,7 +162,27 @@ const WalletList = observer(() => {
                 </header>
                 <main>
                     <div className='mx-auto py-4 sm:px-6 lg:px-10'>
-                        <BasicModal />
+                        <CustomDialog handleSubmit={onClick} isOpen={isOpenAddModal} handleClose={handleCloseClick} title='Add Wallet' subtitle={'Добавить кошелек'} handleOpen={handleOpenAddClick} buttontext={'Добавить кошелек'}>
+                            <TextField
+                                style={{ width: "200px", margin: "5px" }}
+                                type="text"
+                                label="name"
+                                variant="outlined"
+                                name="name"
+                                value={values.name}
+                                onChange={handleInputCreateChange}
+                            />
+                            <TextField
+                                style={{ width: "200px", margin: "5px" }}
+                                type="text"
+                                label="balance"
+                                variant="outlined"
+                                name="balance"
+                                value={values.balance}
+                                onChange={handleInputCreateChange}
+                            />
+                        </CustomDialog>
+                        {/* <BasicModal /> */}
                     </div>
                     <div className="max-w-7xl mx-auto py-2 sm:px-6 lg:px-8">
                         {/* Replace with your content */}
@@ -60,8 +201,30 @@ const WalletList = observer(() => {
                                                 </div>
                                             </Link>
                                         </Button>
-                                        <DeleteModal id={wal.id} />
-                                        <UpdateModal id={wal.id} />
+                                        <CustomDialog handleSubmit={() => onClickDeleteWallet(values.id)} isOpen={isOpenDeleteModal} handleClose={handleCloseClick} title='Delete Wallet' subtitle={'Удалить кошелек?'} handleOpen={() => handleDialogOpenDelete(wal)} buttontext={'Удалить кошелек'} >
+                                        </CustomDialog>
+                                        <CustomDialog handleSubmit={() => onClickUpdateWallet(values.id)} isOpen={isOpenUpdateModal} handleClose={handleCloseClick} title='Delete Wallet' subtitle={'Обновить кошелек?'} handleOpen={() => handleDialogOpenUpdate(wal)} buttontext={'Обновить кошелек'}>
+                                        <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="name"
+                                                variant="outlined"
+                                                name="name"
+                                                value={values.name}
+                                                onChange={handleInputUpdateChange}
+                                            />
+                                            <TextField
+                                                style={{ width: "200px", margin: "5px" }}
+                                                type="text"
+                                                label="balance"
+                                                variant="outlined"
+                                                name="balance"
+                                                value={values.balance}
+                                                onChange={handleInputUpdateChange}
+                                                disabled
+                                            />
+                                            
+                                        </CustomDialog>
 
                                     </div>)}
                             </div>
