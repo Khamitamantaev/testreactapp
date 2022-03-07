@@ -67,7 +67,7 @@ function App() {
     fetch("http://localhost:3001/contacts")
       .then((res) => res.json())
       .then((data) => setData(data));
-  }, [data]);
+  }, []);
 
   return (
     <div className="App">
