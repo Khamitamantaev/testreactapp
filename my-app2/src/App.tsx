@@ -56,10 +56,19 @@ function App() {
     )
   }
 
+  const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch("/api")
+      .then((res) => res.json())
+      .then((data) => setData(data.message));
+  }, []);
+
   return (
     <div className="App">
       <BasicModal onClick={onclick} contacts={contacts} onUpdateClick={onUpdateClick} />
       <Contacts contacts={contacts} onDeleteClick={onDeleteClick} onUpdateClick={onUpdateClick}></Contacts>
+      <p>{!data ? "Loading..." : data}</p>
     </div>
   );
 }
