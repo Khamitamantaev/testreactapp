@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Contacts from './components/Contacts';
 import BasicModal from './components/modals/modal';
@@ -6,6 +6,8 @@ import BasicModal from './components/modals/modal';
 
 
 function App() {
+
+
   const testcontacts = [
     {
       id: 0,
@@ -29,28 +31,35 @@ function App() {
 
   useEffect(() => {
     setIsUpdated(false)
-}, [isUpdated]);
-  
+  }, [contacts]);
+
 
   const onclick = (contactData: { id: number, name: string, phone: number }) => {
     setContacts([...contacts, contactData])
   }
 
   const onDeleteClick = (id: number) => {
-     const newList = contacts.filter((item) => item.id !== id);
-     setContacts(newList)
+    const newList = contacts.filter((item) => item.id !== id);
+    setContacts(newList)
   }
-  
-  const onUpdateClick = (contactupdate: { id: number, name: string, phone: number}) => {
-     console.log(contactupdate)
-     setIsUpdated(true)
-     contacts[contacts.findIndex(el => el.id === contactupdate.id)] = contactupdate;
+
+  const onUpdateClick = (contactupdate: { id: number, name: string, phone: number }) => {
+    console.log(contactupdate)
+    setIsUpdated(true)
+    setContacts(
+      prev => prev.map(contact => contact.id === contactupdate.id ? 
+      { ...contact, 
+        name: contactupdate.name, 
+        phone: contactupdate.phone 
+      } : 
+        contact)
+    )
   }
 
   return (
     <div className="App">
-        <BasicModal onClick={onclick} contacts={contacts} onUpdateClick={onUpdateClick} />
-        <Contacts contacts={contacts} onDeleteClick={onDeleteClick} onUpdateClick={onUpdateClick}></Contacts>
+      <BasicModal onClick={onclick} contacts={contacts} onUpdateClick={onUpdateClick} />
+      <Contacts contacts={contacts} onDeleteClick={onDeleteClick} onUpdateClick={onUpdateClick}></Contacts>
     </div>
   );
 }

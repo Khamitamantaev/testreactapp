@@ -52,16 +52,33 @@ export default function BasicModal(props: any) {
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setValues({
-            id: props.contacts.length,
-            name: values.name,
-            phone: values.phone,
-            [name]: value
-        } as {
-            id: number,
-            name: string,
-            phone: number,
-        })
+        let maxValue;
+        if (props.contacts.length === 0) {
+            maxValue = 0
+            setValues({
+                id: maxValue + 1,
+                name: values.name,
+                phone: values.phone,
+                [name]: value
+            } as {
+                id: number,
+                name: string,
+                phone: number,
+            })
+        }
+        else {
+            maxValue = Math.max(...props.contacts.map((contact: { id: number }) => contact.id))
+            setValues({
+                id: maxValue + 1,
+                name: values.name,
+                phone: values.phone,
+                [name]: value
+            } as {
+                id: number,
+                name: string,
+                phone: number,
+            })
+        }
         // console.log(values)
     }
 
