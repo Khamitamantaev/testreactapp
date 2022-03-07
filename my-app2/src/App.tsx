@@ -29,10 +29,6 @@ function App() {
   const [contacts, setContacts] = useState(testcontacts)
   const [isUpdated, setIsUpdated] = useState(false)
 
-  useEffect(() => {
-    setIsUpdated(false)
-  }, [contacts]);
-
 
   const onclick = (contactData: { id: number, name: string, phone: number }) => {
     setContacts([...contacts, contactData])
@@ -44,6 +40,7 @@ function App() {
       },
       body: JSON.stringify(data),
     })
+    setIsUpdated(true)
   }
 
   const onDeleteClick = (id: number) => {
@@ -65,19 +62,19 @@ function App() {
     )
   }
 
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/api")
+  const [data, setData] = React.useState<{id: number, name: string, phone: string}[]>([]);
+  useEffect(() => {
+    fetch("http://localhost:3001/contacts")
       .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
+      .then((data) => setData(data));
+  }, [data]);
 
   return (
     <div className="App">
       <BasicModal onClick={onclick} contacts={contacts} onUpdateClick={onUpdateClick} />
       <Contacts contacts={contacts} onDeleteClick={onDeleteClick} onUpdateClick={onUpdateClick}></Contacts>
-      <p>{!data ? "Loading..." : data}</p>
+      <div>Data from server</div>
+      <div>{!data ? "Loading..." : data.map(contact => (<div key={contact.id}>Name: {contact.name} with id: {contact.id}</div>))}</div>
     </div>
   );
 }
