@@ -36,6 +36,14 @@ function App() {
 
   const onclick = (contactData: { id: number, name: string, phone: number }) => {
     setContacts([...contacts, contactData])
+    const data = { name: contactData.name, phone: contactData.phone };
+    fetch('http://localhost:3001/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
   }
 
   const onDeleteClick = (id: number) => {
@@ -47,11 +55,12 @@ function App() {
     console.log(contactupdate)
     setIsUpdated(true)
     setContacts(
-      prev => prev.map(contact => contact.id === contactupdate.id ? 
-      { ...contact, 
-        name: contactupdate.name, 
-        phone: contactupdate.phone 
-      } : 
+      prev => prev.map(contact => contact.id === contactupdate.id ?
+        {
+          ...contact,
+          name: contactupdate.name,
+          phone: contactupdate.phone
+        } :
         contact)
     )
   }

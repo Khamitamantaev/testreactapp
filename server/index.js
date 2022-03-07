@@ -1,41 +1,40 @@
 const express = require("express");
 require('dotenv').config();
-
+const app = express();
+var bodyParser = require('body-parser')
 const db = require("./models");
 db.sequelize.sync();
 const Contact = db.contact
 
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 const PORT = process.env.PORT;
 
-const app = express();
+const cors = require("cors")
+
+app.use(cors());
 
 app.post('/contact', (req, res) => {
     console.log(req.body)
-    // if (!req.body.data) {
-    //     res.status(400).send({ message: "Content can not be empty!" });
-    //     return;
-    // }
 
-    // const contact = new Contact({
-    //     data: req.body.data,
-    // });
 
-    // contact
-    //     .save(data)
-    //     .then((data) => {
-    //         res.send({
-    //             shareCode: hash,
-    //             adminCode: hashadmin
-    //         })
-    //     })
-    //     .catch(err => {
-    //         res.status(500).send({
-    //             message:
-    //                 err.message || "Some error occurred while creating the Data."
-    //         });
-    //     });
+    const contact = new Contact({
+        name: req.body.name,
+        phone: req.body.phone,
+    });
 
-    res.send('Contact created')
+    contact
+        .save(contact)
+        .then((result) => {
+            res.send(result)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while creating the Data."
+            });
+        });
 })
 
 app.get('/contacts', async (req, res) => {
